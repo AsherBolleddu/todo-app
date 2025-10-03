@@ -1,6 +1,7 @@
 import { useState } from "react";
 import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
+import TodoFilters from "./components/TodoFilters";
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -8,31 +9,26 @@ function App() {
   const [filter, setFilter] = useState("all");
 
   function handleDelete(id) {
-    return setTodos(todos.filter((todo) => todo.id !== id));
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
   }
 
   function handleComplete(id) {
-    return setTodos(
-      todos.map((todo) => {
-        if (todo.id === id) {
-          todo.isCompleted = !todo.isCompleted;
-        }
-        return todo;
-      })
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
+      )
     );
   }
 
   function handleAddTodo(text) {
-    setCounter((prev) => {
-      const newId = prev + 1;
-      const newTodo = { id: newId, todoItem: text, isCompleted: false };
-      setTodos([...todos, newTodo]);
-      return newId;
-    });
+    const newId = counter + 1;
+    const newTodo = { id: newId, todoItem: text, isCompleted: false };
+    setTodos((prev) => [...prev, newTodo]);
+    setCounter(newId);
   }
 
   function clearCompleted() {
-    setTodos(todos.filter((todo) => !todo.isCompleted));
+    setTodos((prev) => prev.filter((todo) => !todo.isCompleted));
   }
 
   const itemsLeft = todos.filter((todo) => !todo.isCompleted).length;
@@ -51,11 +47,11 @@ function App() {
         onDelete={handleDelete}
         onComplete={handleComplete}
       />
-      <p>{itemsLeft} items left</p>
-      <button onClick={() => setFilter("all")}>All</button>
-      <button onClick={() => setFilter("active")}>Active</button>
-      <button onClick={() => setFilter("completed")}>Completed</button>
-      <button onClick={clearCompleted}>Clear completed</button>
+      <TodoFilters
+        setFilter={setFilter}
+        itemsLeft={itemsLeft}
+        onClearCompleted={clearCompleted}
+      />
     </div>
   );
 }

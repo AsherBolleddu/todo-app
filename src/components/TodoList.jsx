@@ -2,7 +2,7 @@ import TodoItem from "./TodoItem";
 
 export default function TodoList({ filteredTodos, onDelete, onComplete }) {
   return (
-    <>
+    <div>
       {filteredTodos.length === 0 ? (
         <p>No todos yet...</p>
       ) : (
@@ -19,6 +19,6 @@ export default function TodoList({ filteredTodos, onDelete, onComplete }) {
           ))}
         </ul>
       )}
-    </>
+    </div>
   );
 }
