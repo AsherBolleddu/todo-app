@@ -1,15 +1,16 @@
 import { useId, useState } from "react";
 
-export default function TodoForm({ todos, setTodos, counter, setCounter }) {
+export default function TodoForm({ onAddTodo }) {
   const id = useId();
-  const [todoValue, setTodoValue] = useState("");
+  const [value, setValue] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
-    setCounter((c) => c + 1);
-    const newTodo = { id: counter, todoItem: todoValue, isCompleted: false };
-    setTodos([...todos, newTodo]);
-    setTodoValue("");
+    if (!value.trim()) {
+      return;
+    }
+    onAddTodo(value);
+    setValue("");
   }
   return (
     <form onSubmit={handleSubmit}>
@@ -19,8 +20,8 @@ export default function TodoForm({ todos, setTodos, counter, setCounter }) {
         name="todo"
         id={id}
         placeholder="Create a new todo"
-        value={todoValue}
-        onChange={(event) => setTodoValue(event.target.value)}
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
       />
     </form>
   );

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
+
 function App() {
   const [todos, setTodos] = useState([]);
   const [counter, setCounter] = useState(0);
@@ -21,9 +22,14 @@ function App() {
     );
   }
 
-  // function renderTodos(filteredTodos) {
-  //   return
-  // }
+  function handleAddTodo(text) {
+    setCounter((prev) => {
+      const newId = prev + 1;
+      const newTodo = { id: newId, todoItem: text, isCompleted: false };
+      setTodos([...todos, newTodo]);
+      return newId;
+    });
+  }
 
   function clearCompleted() {
     setTodos(todos.filter((todo) => !todo.isCompleted));
@@ -39,13 +45,12 @@ function App() {
 
   return (
     <div>
-      <TodoForm
-        todos={todos}
-        setTodos={setTodos}
-        counter={counter}
-        setCounter={setCounter}
+      <TodoForm onAddTodo={handleAddTodo} />
+      <TodoList
+        filteredTodos={filteredTodos}
+        onDelete={handleDelete}
+        onComplete={handleComplete}
       />
-      {/* <TodoList filteredTodos={filteredTodos} /> */}
       <p>{itemsLeft} items left</p>
       <button onClick={() => setFilter("all")}>All</button>
       <button onClick={() => setFilter("active")}>Active</button>

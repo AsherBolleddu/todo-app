@@ -1,15 +1,24 @@
-// export default function TodoList({ filteredTodos }) {
-//   return (
-//     <ul>
-//       {filteredTodos.map((todo) => (
-//         <li key={todo.id}>
-//           <span className={todo.isCompleted ? "checked" : ""}>
-//             {todo.todoItem}
-//           </span>{" "}
-//           - <button onClick={() => handleComplete(todo.id)}>Completed</button>
-//           <button onClick={() => handleDelete(todo.id)}>Delete</button>
-//         </li>
-//       ))}
-//     </ul>
-//   );
-// }
+import TodoItem from "./TodoItem";
+
+export default function TodoList({ filteredTodos, onDelete, onComplete }) {
+  return (
+    <>
+      {filteredTodos.length === 0 ? (
+        <p>No todos yet...</p>
+      ) : (
+        <ul>
+          {filteredTodos.map((todo) => (
+            <TodoItem
+              key={todo.id}
+              id={todo.id}
+              todoItem={todo.todoItem}
+              isCompleted={todo.isCompleted}
+              onDelete={onDelete}
+              onComplete={onComplete}
+            />
+          ))}
+        </ul>
+      )}
+    </>
+  );
+}
