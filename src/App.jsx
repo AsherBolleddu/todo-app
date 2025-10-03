@@ -1,17 +1,15 @@
 import { useId } from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 function App() {
   const id = useId();
   const [todos, setTodos] = useState([]);
   const [counter, setCounter] = useState(0);
   const [todoValue, setTodoValue] = useState("");
-  useEffect(() => {
-    console.log("Todos changed: ", todos);
-  }, [todos]);
+  const [filter, setFilter] = useState("all");
 
   function handleSubmit(e) {
     e.preventDefault();
-    setCounter(counter + 1);
+    setCounter((c) => c + 1);
     const newTodo = { id: counter, todoItem: todoValue, isCompleted: false };
     setTodos([...todos, newTodo]);
     setTodoValue("");
@@ -32,21 +30,9 @@ function App() {
     );
   }
 
-  function getAll() {
-    return todos;
-  }
-
-  function getCompletedTodos() {
-    return todos.filter((todo) => todo.isCompleted);
-  }
-
-  function getActiveTodos() {
-    return todos.filter((todo) => !todo.isCompleted);
-  }
-
   function renderTodos(filteredTodos) {
-    return filteredTodos.map((todo, i) => (
-      <li key={i}>
+    return filteredTodos.map((todo) => (
+      <li key={todo.id}>
         <span className={todo.isCompleted ? "checked" : ""}>
           {todo.todoItem}
         </span>{" "}
@@ -55,6 +41,18 @@ function App() {
       </li>
     ));
   }
+
+  function clearCompleted() {
+    setTodos(todos.filter((todo) => !todo.isCompleted));
+  }
+
+  const itemsLeft = todos.filter((todo) => !todo.isCompleted).length;
+  const filteredTodos =
+    filter === "active"
+      ? todos.filter((todo) => !todo.isCompleted)
+      : filter === "completed"
+      ? todos.filter((todo) => todo.isCompleted)
+      : todos;
 
   return (
     <div>
@@ -69,14 +67,12 @@ function App() {
           onChange={(event) => setTodoValue(event.target.value)}
         />
       </form>
-      <ul>{renderTodos(getAll())}</ul>
-      <p>items left</p>
-      <button>All</button>
-      <button onClick={() => renderTodos(getActiveTodos())}>Active</button>
-      <button onClick={() => renderTodos(getCompletedTodos())}>
-        Completed
-      </button>
-      <button>Clear completed</button>
+      <ul>{renderTodos(filteredTodos)}</ul>
+      <p>{itemsLeft} items left</p>
+      <button onClick={() => setFilter("all")}>All</button>
+      <button onClick={() => setFilter("active")}>Active</button>
+      <button onClick={() => setFilter("completed")}>Completed</button>
+      <button onClick={clearCompleted}>Clear completed</button>
     </div>
   );
 }
