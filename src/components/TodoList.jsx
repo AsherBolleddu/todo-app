@@ -1,10 +1,20 @@
 import TodoItem from "./TodoItem";
 
-export default function TodoList({ filteredTodos, onDelete, onComplete }) {
+export default function TodoList({
+  todos,
+  filter,
+  filteredTodos,
+  onDelete,
+  onComplete,
+}) {
   return (
     <div>
-      {filteredTodos.length === 0 ? (
+      {todos.length === 0 ? (
         <p>No todos yet...</p>
+      ) : filter === "active" && filteredTodos.length === 0 ? (
+        <p>No active todos</p>
+      ) : filter === "completed" && filteredTodos.length === 0 ? (
+        <p>No completed todos</p>
       ) : (
         <ul>
           {filteredTodos.map((todo) => (
