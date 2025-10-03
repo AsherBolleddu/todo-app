@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
 import TodoFilters from "./components/TodoFilters";
+import Header from "./components/Header";
 
 function App() {
   const getInitalTodos = () => {
@@ -60,20 +61,31 @@ function App() {
       : todos;
 
   return (
-    <div>
-      <TodoForm onAddTodo={handleAddTodo} />
-      <TodoList
-        todos={todos}
-        filter={filter}
-        filteredTodos={filteredTodos}
-        onDelete={handleDelete}
-        onComplete={handleComplete}
-      />
-      <TodoFilters
-        setFilter={setFilter}
-        itemsLeft={itemsLeft}
-        onClearCompleted={clearCompleted}
-      />
+    <div className="min-h-screen flex flex-col bg-base-200">
+      <Header />
+      <main className="flex-1 flex justify-center p-4">
+        <div className="max-w-2xl w-full">
+          <div className="card bg-base-100 shadow-x;">
+            <div className="card-body">
+              <TodoForm onAddTodo={handleAddTodo} />
+              <div className="divider"></div>
+              <TodoList
+                todos={todos}
+                filter={filter}
+                filteredTodos={filteredTodos}
+                onDelete={handleDelete}
+                onComplete={handleComplete}
+              />
+              <div className="divider"></div>
+              <TodoFilters
+                setFilter={setFilter}
+                itemsLeft={itemsLeft}
+                onClearCompleted={clearCompleted}
+              />
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
